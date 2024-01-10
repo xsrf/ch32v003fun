@@ -160,7 +160,7 @@ resend:
 	if( r < 0 )
 	{
 		fprintf( stderr, "Warning: Issue with hid_send_feature_report. Retrying\n" );
-		if( retries++ > 10 )
+		if( retries++ > 32 )
 			return r;
 		else
 			goto resend;
