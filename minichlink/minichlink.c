@@ -1236,7 +1236,11 @@ int DefaultWriteBinaryBlob( void * dev, uint32_t address_to_write, uint32_t blob
 				int i;
 				for( i = 0; i < sectorsize/64; i++ )
 				{
-					int r = MCF.BlockWrite64( dev, base + i*64, blob + rsofar+i*64 );
+					int r, retries = 0;
+					do {
+						r = MCF.BlockWrite64( dev, base + i*64, blob + rsofar+i*64 );
+					} while( r && retries++ < 16);
+
 					rsofar += 64;
 					if( r )
 					{
