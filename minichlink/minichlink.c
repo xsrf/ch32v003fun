@@ -1201,7 +1201,11 @@ int DefaultWriteBinaryBlob( void * dev, uint32_t address_to_write, uint32_t blob
 		int i;
 		for( i = 0; i < blob_size; i+= 64 )
 		{
-			int r = MCF.BlockWrite64( dev, address_to_write + i, blob + i );
+			int r, retries = 0;
+			do {
+				r = MCF.BlockWrite64( dev, address_to_write + i, blob + i );
+			} while( r && retries++ < 16);
+			
 			if( r )
 			{
 				fprintf( stderr, "Error writing block at memory %08x / Error: %d\n", address_to_write, r );
